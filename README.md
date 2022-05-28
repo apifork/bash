@@ -34,6 +34,10 @@ OR
 ./apifork.sh remove
 ```
 
+Old version was working in separated files:
+
+#./apifork/${CMD}.sh
+
 ## TODO:
 
 apipackage 
