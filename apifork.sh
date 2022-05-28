@@ -17,7 +17,8 @@ PROJECT_LIST=$2
 [ -z "$PROJECT_LIST" ] && [ ! -f ".apifork" ] && PROJECT_LIST=$(cat ".apifork")
 [ -z "$PROJECT_LIST" ] && PROJECT_LIST="apifork.txt"
 # START
-while IFS= read -r git_repo; do
+# If the last line of your file has no newline on the end
+while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
   repo=($git_repo)
   echo "$CMD PROJECT: ${repo[1]}/  FROM REPO:  (${repo[0]})"
   if [ "$CMD" == "install" ]; then

@@ -1,6 +1,7 @@
 .idea
 PROJECTS.md
 PROJECTS_LOCAL.md
+readme.logs.txt
 # Logs
 logs
 *.log
@@ -109,3 +110,4 @@ flatedit
 plainedit
 flatedit
 plainedit
+flatedit
