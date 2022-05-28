@@ -5,7 +5,7 @@
 apifork implementation in project
 
 ```bash
-curl https://github.com/apifork/bash/apifork.sh
+curl -O https://raw.githubusercontent.com/apifork/bash/main/apifork.sh
 echo "apifork.txt" > ".apifork"
 echo "" > "apifork.txt"
 ```
