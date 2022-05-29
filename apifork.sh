@@ -17,6 +17,19 @@ CONFIG_FILE=".apifork"
 CONFIG_DEFAULT="apifork.txt"
 CONFIG_DEV="apifork.dev.txt"
 CONFIG_TEST="apifork.test.txt"
+if [ "$CMD" == "-h" ] || [ "$CMD" == "--help" ]; then
+  echo "set config for:"
+  echo "init - the default config, for customers"
+  echo "dev - development packages, for contributors and developers"
+  echo "test - for testing the project"
+  echo ""
+  echo "git repositories:"
+  echo "install"
+  echo "update"
+  echo "remove"
+  echo ""
+  exit
+fi
 if [ "$CMD" == "init" ]; then
   echo -n "$CONFIG_DEFAULT" > "$CONFIG_FILE"
   exit
