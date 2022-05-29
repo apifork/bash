@@ -13,9 +13,27 @@
 CMD=$1
 [ -z "$CMD" ] && CMD="install"
 #
+CONFIG_FILE=".apifork"
+CONFIG_DEFAULT="apifork.txt"
+CONFIG_DEV="apifork.dev.txt"
+CONFIG_TEST="apifork.test.txt"
+if [ "$CMD" == "init" ]; then
+  echo -n "$CONFIG_DEFAULT" > "$CONFIG_FILE"
+  exit
+fi
+if [ "$CMD" == "dev" ]; then
+  echo -n "$CONFIG_DEV" > "$CONFIG_FILE"
+  exit
+fi
+if [ "$CMD" == "test" ]; then
+  echo -n "$CONFIG_TEST" > "$CONFIG_FILE"
+  exit
+fi
+#
 PROJECT_LIST=$2
-[ -z "$PROJECT_LIST" ] && [ ! -f ".apifork" ] && PROJECT_LIST=$(cat ".apifork")
-[ -z "$PROJECT_LIST" ] && PROJECT_LIST="apifork.txt"
+[ -z "$PROJECT_LIST" ] && [ -f "$CONFIG_FILE" ] && PROJECT_LIST=$(cat "$CONFIG_FILE")
+[ -z "$PROJECT_LIST" ] && PROJECT_LIST="$CONFIG_DEFAULT"
+
 # START
 # If the last line of your file has no newline on the end
 while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
