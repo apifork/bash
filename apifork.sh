@@ -47,6 +47,15 @@ PROJECT_LIST=$2
 [ -z "$PROJECT_LIST" ] && [ -f "$CONFIG_FILE" ] && PROJECT_LIST=$(cat "$CONFIG_FILE")
 [ -z "$PROJECT_LIST" ] && PROJECT_LIST="$CONFIG_DEFAULT"
 
+PROJECT_PATH=$(pwd)
+echo $PROJECT_PATH
+BUILD="pwd"
+APIBUILD="./apibuild"
+APIFORK_BUILD="pwd"
+APIFORK_BUILD="./apifork install"
+APIFORK_UPDATE="./apifork update"
+BUILD="composer update"
+UPDATE="composer update"
 # START
 # If the last line of your file has no newline on the end
 while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
@@ -56,8 +65,11 @@ while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
     echo "${repo[1]}" >>.gitignore
     git clone ${git_repo}
   elif [ "$CMD" == "update" ]; then
-    cd ${repo[1]} && git pull
-    cd ..
+    cd ${repo[1]} && git pull && ${UPDATE}
+    pwd
+    ${APIFORK_UPDATE}
+    cd ${PROJECT_PATH}
+    #cd ..
   elif [ "$CMD" == "remove" ]; then
     rm -rf ${repo[1]}
   else
