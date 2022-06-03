@@ -13,6 +13,7 @@
 CMD=$1
 [ -z "$CMD" ] && CMD="install"
 #
+DSL_HASH="#"
 CONFIG_FILE=".apifork"
 CONFIG_DEFAULT="apifork.txt"
 CONFIG_DEV="apifork.dev.txt"
@@ -60,6 +61,7 @@ UPDATE="composer update"
 # If the last line of your file has no newline on the end
 while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
   repo=($git_repo)
+  [ "${repo:0:1}" == "${DSL_HASH}" ] && continue
   echo "$CMD PROJECT: ${repo[1]}/  FROM REPO:  (${repo[0]})"
   if [ "$CMD" == "install" ]; then
     echo "${repo[1]}" >>.gitignore
