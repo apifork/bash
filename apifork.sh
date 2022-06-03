@@ -65,14 +65,14 @@ while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
     echo "${repo[1]}" >>.gitignore
     git clone ${git_repo}
   elif [ "$CMD" == "update" ]; then
-    cd ${repo[1]} && git pull && ${UPDATE}
-    pwd
-    ${APIFORK_UPDATE}
-    cd ${PROJECT_PATH}
-    #cd ..
+    cd ${repo[1]} && git pull
+    [ "$(pwd)" != "${PROJECT_PATH}" ] && ${UPDATE}
+    [ "$(pwd)" == "${PROJECT_PATH}" ] && echo "!!! PROJECT ${repo[1]} NOT EXIST, PLEASE INSTALL FIRST "
+    #${APIFORK_UPDATE}
   elif [ "$CMD" == "remove" ]; then
     rm -rf ${repo[1]}
   else
     echo "Command $CMD is not recognized"
   fi
+  cd ${PROJECT_PATH}
 done <"$PROJECT_LIST"
