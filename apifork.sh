@@ -55,8 +55,10 @@ APIBUILD="./apibuild"
 APIFORK_BUILD="pwd"
 APIFORK_BUILD="./apifork install"
 APIFORK_UPDATE="./apifork update"
-BUILD="composer update"
-UPDATE="composer update"
+BUILD_PHP="composer update"
+BUILD_NODEJS="npm update"
+BUILD_PYTHON="python"
+BUILD_JAVA="mvn clean package"
 # START
 # If the last line of your file has no newline on the end
 while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
@@ -68,8 +70,9 @@ while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
     git clone ${git_repo}
   elif [ "$CMD" == "update" ]; then
     cd ${repo[1]} && git pull
-    [ "$(pwd)" != "${PROJECT_PATH}" ] && ${UPDATE}
-    [ "$(pwd)" == "${PROJECT_PATH}" ] && echo "!!! PROJECT ${repo[1]} NOT EXIST, PLEASE INSTALL FIRST "
+    [ "$(pwd)" == "${PROJECT_PATH}" ] && echo "!!! PROJECT ${repo[1]} NOT EXIST, PLEASE INSTALL FIRST " && continue
+    [ -f "composer.json" ] && ${BUILD_PHP}
+    [ -f "package.json" ] && ${BUILD_NODEJS}
     #${APIFORK_UPDATE}
   elif [ "$CMD" == "remove" ]; then
     rm -rf ${repo[1]}
