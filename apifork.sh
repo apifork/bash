@@ -25,8 +25,10 @@ if [ "$CMD" == "-h" ] || [ "$CMD" == "--help" ]; then
   echo "test - for testing the project"
   echo ""
   echo "git repositories:"
-  echo "install"
+  echo "install - clone and build"
+  echo "clone"
   echo "update"
+  echo "build"
   echo "remove"
   echo ""
   exit
@@ -59,21 +61,34 @@ BUILD_PHP="composer update"
 BUILD_NODEJS="npm update"
 BUILD_PYTHON="python"
 BUILD_JAVA="mvn clean package"
+BUILD_APIFORK="./apifork install"
 # START
 # If the last line of your file has no newline on the end
 while git_repo=; IFS=$' \t\r\n' read -r git_repo || [[ $git_repo ]]; do
   repo=($git_repo)
+  # Comments
   [ "${repo:0:1}" == "${DSL_HASH}" ] && continue
+  # Empty line
+  [ -z "$repo" ] && continue
+
   echo "$CMD PROJECT: ${repo[1]}/  FROM REPO:  (${repo[0]})"
   if [ "$CMD" == "install" ]; then
     echo "${repo[1]}" >>.gitignore
     git clone ${git_repo}
-  elif [ "$CMD" == "update" ]; then
-    cd ${repo[1]} && git pull
+    cd ${repo[1]}
     [ "$(pwd)" == "${PROJECT_PATH}" ] && echo "!!! PROJECT ${repo[1]} NOT EXIST, PLEASE INSTALL FIRST " && continue
     [ -f "composer.json" ] && ${BUILD_PHP}
     [ -f "package.json" ] && ${BUILD_NODEJS}
-    #${APIFORK_UPDATE}
+  elif [ "$CMD" == "update" ]; then
+    cd ${repo[1]}
+    [ "$(pwd)" == "${PROJECT_PATH}" ] && echo "!!! PROJECT ${repo[1]} NOT EXIST, PLEASE INSTALL FIRST " && continue
+    git pull
+  elif [ "$CMD" == "build" ]; then
+    cd ${repo[1]}
+    [ "$(pwd)" == "${PROJECT_PATH}" ] && echo "!!! PROJECT ${repo[1]} NOT EXIST, PLEASE INSTALL FIRST " && continue
+    [ -f "composer.json" ] && ${BUILD_PHP}
+    [ -f "package.json" ] && ${BUILD_NODEJS}
+    [ -f "apifork" ] && ${BUILD_APIFORK}
   elif [ "$CMD" == "remove" ]; then
     rm -rf ${repo[1]}
   else
